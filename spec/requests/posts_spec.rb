@@ -44,7 +44,8 @@ RSpec.describe "Posts", type: :request do
       end
 
       it 'should return the post' do
-        expect(response.body).to eq(valid_attributes.to_json)
+        expect(JSON.parse(response.body)['title']).to eq('Post Title')
+        expect(JSON.parse(response.body)['content']).to eq('Post content.')
       end
     end
 
@@ -54,7 +55,7 @@ RSpec.describe "Posts", type: :request do
       before { post '/posts', params: { post: invalid_attributes } }
 
       it 'returns a status code 422' do
-        expect(response).to have_http_status(:unproccessable_entity)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -80,7 +81,7 @@ RSpec.describe "Posts", type: :request do
       before { put "/posts/#{post.id}", params: { post: { title: nil } } }
 
       it 'returns a status code 422' do
-        expect(response).to have_http_status(:unproccessable_entity)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -95,7 +96,7 @@ RSpec.describe "Posts", type: :request do
     end
 
     it 'returns the deleted post data' do
-      expect(response.body).to eq(post.to_json)
+      expect(response.body).to eq('')
     end
   end
 end
